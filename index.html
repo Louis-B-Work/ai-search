@@ -401,6 +401,14 @@ button,a,.opt,.chip{touch-action:manipulation;-webkit-tap-highlight-color:transp
   body.res .after-area{padding-top:28px}
   #below{padding-bottom:32px!important}
 }
+/* phones: header and title match the live Help & Guides page (96px header, big white H1), same in the lander and in a conversation */
+@media(max-width:600px){
+  header.nav,.navrow{height:96px}
+  h1,body.res h1{display:block!important;font-size:min(48px,calc((100vw - 32px)/7.3));line-height:1.25;margin:0}
+  body:not(.res) .hero-body,body.res .hero-body{padding-top:48px}
+  body.res .hero-body{padding-bottom:28px}
+  .pull.res{padding-top:16px}
+}
 </style>
 </head>
 <body class="">
