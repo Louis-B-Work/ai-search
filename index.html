@@ -408,7 +408,6 @@ button,a,.opt,.chip{touch-action:manipulation;-webkit-tap-highlight-color:transp
 <div class="proto"><div class="wrap">
   <b>Prototype</b>
   <div class="seg" id="seg" role="group" aria-label="Jump to a screen"><button data-s="idle" aria-pressed="true">Lander</button><button data-s="follow">Conversation</button></div>
-  <label class="tog"><input type="checkbox" id="cmpTog"> Show current site search</label>
 </div></div>
 
 <div id="app">
@@ -667,8 +666,7 @@ function guidesBlock(pop){
   const answered=thread.filter(x=>x.k&&x.phase==='done'),ld=DATA[answered[answered.length-1].k],ids=[];
   answered.slice().reverse().forEach(x=>DATA[x.k].src.forEach(id=>{if(!ids.includes(id))ids.push(id)}));
   related(ld).forEach(id=>{if(ids.length<3&&!ids.includes(id))ids.push(id)});
-  return `<div class="relwrap relcol${pop?' pop':''}"><h4 class="relh">Guides related to your conversation</h4><div class="relgrid">${ids.slice(0,3).map(id=>{const g=GUIDES[id];return `<a class="card rel" href="${gurl(id)}" target="_blank" rel="noopener"><div class="rimg">${guidePic(id)}</div><div class="rbody"><b>${esc(g[0])}</b><div class="rfoot"><span class="rl">Read guide <i aria-hidden="true">→</i></span><span class="rtime">${g[2]} min read</span></div></div></a>`}).join('')}</div></div>
- <aside class="cmp card"><h4>Current site search (for comparison)</h4><div style="font-size:18px;margin:4px 0">150 results found (showing first 5)</div><ol>${CMP.map(c=>`<li><a href="#">${esc(c)}</a></li>`).join('')}</ol></aside>`}
+  return `<div class="relwrap relcol${pop?' pop':''}"><h4 class="relh">Guides related to your conversation</h4><div class="relgrid">${ids.slice(0,3).map(id=>{const g=GUIDES[id];return `<a class="card rel" href="${gurl(id)}" target="_blank" rel="noopener"><div class="rimg">${guidePic(id)}</div><div class="rbody"><b>${esc(g[0])}</b><div class="rfoot"><span class="rl">Read guide <i aria-hidden="true">→</i></span><span class="rtime">${g[2]} min read</span></div></div></a>`}).join('')}</div></div>`}
 function fmt(d){
   const l1=d.paras.join('').replace(/\[(\d)\]/g,'').replace(/\{([^}]+)\}/g,(m,x)=>'<a href="'+(d.link?gurl(d.link):'#')+'" target="_blank" rel="noopener">'+x+'</a>');
   return l1+`<ul class="points">${d.points.map(p=>`<li>${p}</li>`).join('')}</ul>`;
@@ -787,7 +785,6 @@ app.addEventListener('click',e=>{
   if(e.target.closest('a[href="#"]'))e.preventDefault();
 });
 app.addEventListener('submit',e=>{if(e.target.matches('[data-follow]')){e.preventDefault();const i=e.target.querySelector('input');ask(i.value,{keep:true})}});
-$('#cmpTog').addEventListener('change',e=>document.body.classList.toggle('show-cmp',e.target.checked));
 
 /* prototype state switcher */
 $('#seg').addEventListener('click',e=>{
