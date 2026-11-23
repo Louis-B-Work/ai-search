@@ -133,6 +133,33 @@ main{background:#fff;padding:0 0 64px;min-height:520px;position:relative}
 .steps li.act .b{border-color:var(--purple);border-top-color:transparent;animation:spin .8s linear infinite}
 .steps li.ok{color:#000}
 .steps li.ok .b{background:var(--green);border-color:var(--green)}
+.readlist{list-style:none;margin:-2px 0 16px 30px;padding:0;display:grid;gap:6px}
+.readlist li{display:flex;gap:8px;align-items:center;font-size:14px;line-height:20px;color:var(--muted);animation:rise .35s both}
+.readlist .tk{flex:none;width:14px;height:14px;border-radius:50%;border:2px solid #cfc3e8}
+.readlist li.rd{color:#000}.readlist li.rd .tk{background:var(--purple);border-color:var(--purple)}
+.readlist .tt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.based{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:0 0 14px;font-size:13px;line-height:18px;color:var(--muted)}
+.based a{display:inline-flex;gap:6px;align-items:center;max-width:100%;padding:3px 10px 3px 4px;border:1px solid var(--purple-10);border-radius:8px;color:#000;text-decoration:none;background:#fff}
+.based a:hover{border-color:var(--purple);color:var(--purple)}
+.based a i{font-style:normal;flex:none;width:18px;height:18px;border-radius:50%;background:var(--purple-10);color:var(--purple);display:grid;place-items:center;font-size:11px;font-weight:700}
+.based a span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.body a.cite{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 4px;margin-left:3px;border-radius:9px;background:var(--purple-10);color:var(--purple);font-size:11px;font-weight:700;line-height:1;text-decoration:none;vertical-align:2px}
+.body a.cite:hover{background:var(--purple);color:#fff}
+.body p.key{background:var(--purple-10);border-left:4px solid var(--purple);border-radius:0 8px 8px 0;padding:10px 14px;margin:0 0 14px}
+.vs{margin:0 0 14px;overflow:hidden;border:1px solid var(--purple-20);border-radius:8px}
+.vs table{width:100%;border-collapse:collapse;font-size:15px;line-height:21px}
+.vs caption{text-align:left;font-weight:700;padding:10px 14px;background:var(--purple-10)}
+.vs th,.vs td{text-align:left;padding:9px 14px;vertical-align:top;border-top:1px solid var(--purple-10)}
+.vs thead th{font-size:13px;color:var(--muted);font-weight:700;border-top:1px solid var(--purple-20)}
+.vs tbody th{font-weight:700;width:28%}
+.sth{margin:0 0 8px;font-size:16px}
+.stp{list-style:none;counter-reset:s;margin:0 0 6px;padding:0;display:grid;gap:10px}
+.stp li{counter-increment:s;display:grid;grid-template-columns:28px 1fr;column-gap:12px}
+.stp li::before{content:counter(s);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
+.stp li span{color:var(--muted)}
+@media(max-width:600px){.vs table{font-size:13px;line-height:18px}.vs th,.vs td{padding:7px 10px}.body p.key{padding:8px 12px}.stp li{grid-template-columns:24px 1fr;column-gap:10px}.stp li::before{width:24px;height:24px;font-size:13px}}
+.stopped{color:var(--muted);font-size:14px;margin:0}
+.lnk{background:none;border:0;padding:0;color:var(--purple);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
 @keyframes spin{to{transform:rotate(360deg)}}
 .skel i{display:block;height:14px;border-radius:7px;background:linear-gradient(90deg,#efe8fb 25%,#f8f4ff 50%,#efe8fb 75%);background-size:200% 100%;animation:sh 1.2s infinite;margin-bottom:10px}
 @keyframes sh{to{background-position:-200% 0}}
@@ -508,35 +535,38 @@ const searchIc='<svg width="20" height="20" viewBox="0 0 24 24" fill="currentCol
 
 /* Answers. [n] = numbered source marker, {text} = inline guide link. */
 const DATA={
- pcp:{q:"What is PCP?",title:"PCP means Personal Contract Purchase",
+ pcp:{q:"What is PCP?",title:"PCP means Personal Contract Purchase",key:"PCP keeps monthly payments lower by covering the car's drop in value, then gives you a choice at the end.",
   paras:["<p>PCP is a type of car finance where you pay a deposit if you want to, then monthly payments based on how much the car is expected to lose in value, not its full price[1].</p>","<p>At the end, you usually have three options: hand the car back, pay the final balloon payment to own it, or part exchange it for another car[2]. Read our guide on {is PCP car finance worth it?} to see if it suits you.</p>"],
+  table:{cap:"PCP compared with hire purchase",h:["","PCP","Hire purchase"],rows:[["Monthly payments","Often lower","Often higher"],["Owning the car","Only if you pay the balloon payment","Yours after the last payment"],["Mileage limit","Yes","No"]]},
   points:["Monthly payments are often lower than hire purchase","The final balloon payment is agreed at the start","Mileage limits and the car's condition can affect what you pay at the end"],
   link:"g16",src:["g16","g10","g14"],cta:"Ready to see what you could borrow?",fups:["What is a balloon payment?","PCP or hire purchase – which is better?","Can I get PCP with bad credit?"]},
- balloon:{q:"What is a balloon payment?",title:"A balloon payment is the final lump sum on a PCP deal",
+ balloon:{q:"What is a balloon payment?",title:"A balloon payment is the final lump sum on a PCP deal",key:"You only pay the balloon payment if you want to keep the car.",
   paras:["<p>With PCP, your monthly payments don't cover the whole price of the car. The balloon payment is the amount agreed at the start that you pay at the end if you want to keep it[1].</p>","<p>You don't have to pay it. You can also hand the car back or part exchange it for another one, as long as you've kept to your mileage limit and the car is in fair condition[2].</p>"],
   points:["The amount is agreed at the start of the deal","You can choose not to pay it and hand the car back","Mileage and condition can affect what happens at the end"],
   src:["g14","g10","g16"],cta:"See what you could borrow",fups:["PCP or hire purchase – which is better?","Can I refinance my balloon payment?","What is residual value?"]},
- credit:{q:"Can I get car finance with a bad credit score?",title:"Yes, bad credit doesn't have to stop you",
+ credit:{q:"Can I get car finance with a bad credit score?",title:"Yes, bad credit doesn't have to stop you",key:"Bad credit doesn't automatically rule you out – some lenders specialise in your situation.",
   paras:["<p>We work with lenders who specialise in helping people in your situation. You may pay a higher rate, and some will ask for a deposit[1].</p>","<p>A soft search can show your likely options before you make a full application[2]. A bigger deposit or a lower-priced car can help your chances too.</p>"],
+  steps:{h:"What to do next",items:[["Check your options with a soft search","See which lenders could work before a full application."],["Get your proof of income ready","Recent payslips or bank statements help."],["Think about a deposit","Even a small one can widen your options."]]},
   points:["Steady income can carry more weight than a past blip","Missed payments, defaults and CCJs are all considered case by case","There's no obligation to go ahead once you've seen your options"],
   src:["g13","g9","g10"],cta:"See what you could borrow",fups:["What is a CCJ and how does it affect me?","Do I need a deposit?","How can I improve my credit score?"]},
- ccj:{q:"Can I get car finance with a CCJ?",title:"A CCJ makes things harder, but not impossible",
+ ccj:{q:"Can I get car finance with a CCJ?",title:"A CCJ makes things harder, but not impossible",key:"A CCJ makes it harder, but some lenders will still consider you.",
   paras:["<p>Some lenders on our platform will consider an application with a County Court Judgment (CCJ), especially if it's been satisfied or is a few years old[1].</p>","<p>Expect to be asked about the date and amount, and be ready to show your income. Our guide on {car finance with a default} covers a similar route[2].</p>"],
   points:["A satisfied CCJ usually looks better than an unpaid one","A deposit can widen your options","Lenders also check the monthly payment is affordable"],
   link:"g11",src:["g9","g11","g8"],cta:"Check which lenders could work for you",fups:["How long does a CCJ stay on my file?","Can I get car finance with an IVA?","Do I need a deposit?"]},
- swap:{q:"Can I swap my car on finance?",title:"Often yes, but check what you still owe first",
+ swap:{q:"Can I swap my car on finance?",title:"Often yes, but check what you still owe first",key:"Find out your settlement figure first – it shows whether the car is worth more or less than you owe.",
   paras:["<p>You can usually swap a car that's on finance once you know your settlement figure. If the car is worth less than you owe, the gap can be added to your next deal[1].</p>","<p>Our guide on {understanding negative equity} explains how that works[2].</p>"],
+  steps:{h:"Steps to take",items:[["Ask your lender for a settlement figure","It's what you'd pay to clear the finance."],["Compare it with the car's trade-in value","That shows if there's a gap."],["Decide how to cover any gap","It can sometimes be added to your next deal."]]},
   points:["Ask your lender for a settlement figure","Compare it with the car's trade-in value","Waiting a few months can narrow the gap"],
   link:"g3",src:["g12","g3","g21"],cta:"See what you could borrow",fups:["How do I get a settlement figure?","Is GAP insurance worth it?","Who owns a car on finance?"]},
- negative:{q:"What is negative equity?",title:"Negative equity means you owe more than the car is worth",
+ negative:{q:"What is negative equity?",title:"Negative equity means you owe more than the car is worth",key:"Negative equity is the gap between what you owe and what the car is worth.",
   paras:["<p>If you swap the car, the shortfall is often rolled into your next agreement, which can raise your monthly cost[1].</p>","<p>Paying down the gap first keeps the new deal cheaper[2].</p>"],
   points:["Get your settlement figure","Compare it with the trade-in value","Think about GAP insurance"],
   src:["g3","g19","g12"],cta:"See what you could borrow",fups:["How do I get a settlement figure?","Is GAP insurance worth it?","Can I sell a car that's on finance?"]},
- benefits:{q:"Can I get car finance if I'm on benefits?",title:"Possibly – it depends on the type of benefit",
+ benefits:{q:"Can I get car finance if I'm on benefits?",title:"Possibly – it depends on the type of benefit",key:"Some benefits count as income for some lenders, so it depends on what you receive.",
   paras:["<p>Some lenders count certain benefits as income, for example PIP, DLA or Carer's Allowance[1]. Others only look at earned income.</p>","<p>Lenders also check the payment is affordable[2]. Have your award letters ready.</p>"],
   points:["Keep your benefit award letters handy","A guarantor can widen your options","Mobility vehicles through Motability are a separate route"],
   src:["g2","g1","g4"],cta:"Check which lenders could accept your income",fups:["Which benefits count as income?","Can I use a guarantor?","How much can I afford each month?"]},
- generic:{q:"",title:"Here's what our guides say",
+ generic:{q:"",title:"Here's what our guides say",key:"Lenders mainly look at your income, what you can afford, and your credit history.",
   paras:["<p>Lenders mostly look at your income, what you can afford each month, and your credit history[1]. A soft search can show your likely options before you make a full application[2].</p>","<p>Tell us a bit more – the type of car or your situation – and we can narrow it down.</p>"],
   points:["Income and affordability matter most","Credit history is only part of the picture","You can check your options with no obligation"],
   src:["g13","g9","g4"],cta:"Check your eligibility in a couple of minutes",fups:["Am I eligible for car finance?","What documents will I need?","How long does approval take?"]}
@@ -607,7 +637,7 @@ function setActive(i,preview){ddActive=i;dd.querySelectorAll('.opt').forEach((o,
 function openDD(){if(!q.value.trim()&&!isPhone()&&!document.body.classList.contains('res')){closeDD();return}const was=dd.classList.contains('on');buildDD();if(!was){dd.classList.add('fresh');setTimeout(()=>dd.classList.remove('fresh'),600)}dd.classList.add('on');q.setAttribute('aria-expanded','true')}
 function closeDD(){dd.classList.remove('on');q.setAttribute('aria-expanded','false');q.removeAttribute('aria-activedescendant')}
 function chooseDD(i){const it=ddItems[i];if(!it)return;closeDD();if(isPhone())q.blur();if(it.type==='ask'){q.value=it.text;ask(it.text)}else{window.open(gurl(it.id),'_blank','noopener')}}
-function syncInput(){form.classList.toggle('has',!!q.value);const p=piiCheck(q.value);warn.classList.toggle('on',!!p);warn.textContent=p?`That looks like ${p}. Please don't share personal details – just ask your question in general terms.`:''}
+function syncInput(){form.classList.toggle('has',!!q.value);if(typeof updGo==='function'&&typeof thread!=='undefined')updGo();const p=piiCheck(q.value);warn.classList.toggle('on',!!p);warn.textContent=p?`That looks like ${p}. Please don't share personal details – just ask your question in general terms.`:''}
 q.addEventListener('focus',()=>{ddOrig=q.value;openDD()});
 q.addEventListener('input',()=>{ddOrig=q.value;syncInput();openDD()});
 q.addEventListener('keydown',e=>{
@@ -620,7 +650,7 @@ q.addEventListener('keydown',e=>{
 dd.addEventListener('mousedown',e=>{e.preventDefault();const o=e.target.closest('.opt');if(o)chooseDD(+o.dataset.i)});
 document.addEventListener('click',e=>{if(!e.target.closest('.searchwrap'))closeDD()});
 $('#clear').addEventListener('click',()=>{q.value='';syncInput();q.focus();openDD()});
-form.addEventListener('submit',e=>{e.preventDefault();const v=q.value;closeDD();if(isPhone())q.blur();ask(v)});
+form.addEventListener('submit',e=>{e.preventDefault();if(form.querySelector('.go.stop')){stop();return}const v=q.value;closeDD();if(isPhone())q.blur();ask(v)});
 
 /* rotating placeholder */
 /* ghost suggestions: roll softly while focused; typed text overlays the idea */
@@ -685,16 +715,20 @@ function guidesBlock(pop){
   related(ld).forEach(id=>{if(ids.length<3&&!ids.includes(id))ids.push(id)});
   return `<div class="relwrap relcol${pop?' pop':''}"><h4 class="relh">Guides related to your conversation</h4><div class="relgrid">${ids.slice(0,3).map(id=>{const g=GUIDES[id];return `<a class="card rel" href="${gurl(id)}" target="_blank" rel="noopener"><div class="rimg">${guidePic(id)}</div><div class="rbody"><b>${esc(g[0])}</b><div class="rfoot"><span class="rl">Read guide <i aria-hidden="true">→</i></span><span class="rtime">${g[2]} min read</span></div></div></a>`}).join('')}</div></div>`}
 function fmt(d){
-  const l1=d.paras.join('').replace(/\[(\d)\]/g,'').replace(/\{([^}]+)\}/g,(m,x)=>'<a href="'+(d.link?gurl(d.link):'#')+'" target="_blank" rel="noopener">'+x+'</a>');
-  return l1+`<ul class="points">${d.points.map(p=>`<li>${p}</li>`).join('')}</ul>`;
+  const key=d.key?'<p class="key"><b>In short:</b> '+d.key+'</p>':'';
+  const tbl=d.table?'<div class="vs"><table><caption>'+d.table.cap+'</caption><thead><tr>'+d.table.h.map(x=>'<th scope="col">'+x+'</th>').join('')+'</tr></thead><tbody>'+d.table.rows.map(r=>'<tr><th scope="row">'+r[0]+'</th>'+r.slice(1).map(x=>'<td>'+x+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>':'';
+  const stp=d.steps?'<h4 class="sth">'+d.steps.h+'</h4><ol class="stp">'+d.steps.items.map(x=>'<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>').join('')+'</ol>':'';
+  const l1=d.paras.join('').replace(/\[(\d)\]/g,(m,n)=>{const id=d.src[n-1];return id?`<a class="cite" href="${gurl(id)}" target="_blank" rel="noopener" title="${esc(GUIDES[id][0])}" aria-label="Source ${n}: ${esc(GUIDES[id][0])}">${n}</a>`:''}).replace(/\{([^}]+)\}/g,(m,x)=>'<a href="'+(d.link?gurl(d.link):'#')+'" target="_blank" rel="noopener">'+x+'</a>');
+  return key+l1+tbl+stp+(d.steps?'':`<ul class="points">${d.points.map(p=>`<li>${p}</li>`).join('')}</ul>`);
 }
 function turnHtml(t,i){
   const last=i===thread.length-1, d=t.k?DATA[t.k]:null;
   let main='';
   if(t.phase==='loading'){
-    const s=t.step||0, L=['Searching our guides','Found 3 relevant guides','Writing your answer'];
+    const s=t.step||0, gs=d?d.src.map(id=>GUIDES[id]):[], L=['Searching our guides',gs.length?`Found ${gs.length} relevant guides`:'Found relevant guides','Reading them for your answer','Writing your answer'];
     main=`<div class="reply"><article class="bubble answer"><div class="ahead"><h3 class="at">Finding your answer…</h3></div>
       <ol class="steps">${L.map((x,n)=>`<li class="${n<s?'ok':n===s?'act':''}"><span class="b"></span>${x}</li>`).join('')}</ol>
+      ${gs.length&&s>=1?`<ul class="readlist">${gs.map((g,n)=>`<li class="${s>=3||(s===2&&n===0)?'rd':''}" style="animation-delay:${n*90}ms"><span class="tk"></span><span class="tt">${esc(g[0])}</span></li>`).join('')}</ul>`:''}
       <div class="skel"><i style="width:92%"></i><i style="width:84%"></i><i style="width:60%"></i></div></article></div>`;
   }else if(t.phase==='none'){
     main=`<article class="card msg"><div class="ico">${ic('chart')}</div><h3>We couldn't find that in our guides</h3>
@@ -706,10 +740,11 @@ function turnHtml(t,i){
       <p>We couldn't get your answer just now. Your question is still saved – give it another go.</p>
       <button class="btn" data-retry="${i}">Try again</button> <a class="btn" style="background:#fff;border:1px solid #ccc" href="#" data-reset>Browse all guides</a></article>`;
   }else{
-    const done=t.phase==='done';
+    const done=t.phase==='done', st=t.phase==='stopped';
+    const based=`<div class="based"><span>Based on ${d.src.length} guides</span>${d.src.map((id,n)=>`<a href="${gurl(id)}" target="_blank" rel="noopener"><i>${n+1}</i><span>${esc(GUIDES[id][0])}</span></a>`).join('')}</div>`;
     main=`<div class="reply"><article class="bubble answer ${done?'done':''}">
-      <div class="ahead"><h3 class="at">${esc(d.title)}</h3></div><div class="body" data-body>${done?fmt(d):''}</div>
-      ${done?'':'<button class="skip" data-skip>Skip animation</button>'}
+      <div class="ahead"><h3 class="at">${esc(d.title)}</h3></div>${based}<div class="body" data-body>${done?fmt(d):st?(t.part||''):''}</div>
+      ${st?'<p class="stopped">Answer stopped. <button class="lnk" data-regen>Ask again</button></p>':done?'':'<button class="skip" data-skip>Skip animation</button>'}
       </article></div>`;
   }
   return `<section class="turn${t.enter?' enter':''}" data-i="${i}"><div class="q"><div class="you">${esc(t.text)}</div></div><div class="result"><div>${main}</div></div></section>`;
@@ -723,7 +758,7 @@ function render(){
   const on=thread.length>0;stage.classList.toggle("res",on);document.body.classList.toggle('res',on);
   document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.s==='idle')!==on)));
   const sw=document.querySelector('.searchwrap'),dock=$('#dock');
-  q.placeholder=phText();
+  q.placeholder=phText();updGo();
   if(on){if(sw.parentElement!==dock){dock.prepend(sw);ghostEl.classList.remove('on')}}
   else if(sw.parentElement===dock){$('#chips').before(sw)}
   saveThread();
@@ -770,20 +805,34 @@ function run(t){
   announce('Searching our guides');
   const upd=n=>{t.step=n;rerenderTurn(t)};
   if(t.instant||reduce){finish(t);return}
-  later(()=>upd(1),700);
+  later(()=>upd(1),600);
   if(t.hold)return;
-  later(()=>upd(2),1400);
-  later(()=>finish(t),2000);
+  later(()=>upd(2),1300);
+  later(()=>upd(3),1900);
+  later(()=>finish(t),2500);
 }
-function rerenderTurn(t){const i=thread.indexOf(t);const el=stage.querySelector(`[data-i="${i}"]`);if(el)el.outerHTML=turnHtml(t,i)}
+function rerenderTurn(t){const i=thread.indexOf(t);const el=stage.querySelector(`[data-i="${i}"]`);if(el)el.outerHTML=turnHtml(t,i);updGo()}
+/* the Ask button becomes Stop while an answer is being found or written (and the box is empty) */
+const STOP_IC='<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>';
+function updGo(){
+  const t=thread[thread.length-1],busy=!!t&&(t.phase==='loading'||t.phase==='stream')&&!q.value.trim();
+  const b=form.querySelector('.go');if(!b)return;if(!b.dataset.o)b.dataset.o=b.innerHTML;
+  if(b.classList.contains('stop')===busy)return;
+  b.classList.toggle('stop',busy);b.innerHTML=busy?'<span class="t">Stop</span>'+STOP_IC:b.dataset.o;b.setAttribute('aria-label',busy?'Stop answering':'Ask AI');
+}
+function stop(){
+  const t=thread[thread.length-1];if(!t)return;clearTimers();
+  if(t.phase==='loading'){thread.pop();q.value=t.text;syncInput();render();announce('Stopped. Your question is back in the box.');q.focus();return}
+  if(t.phase==='stream'){t.phase='stopped';render();announce('Answer stopped.')}
+}
 function finish(t){
   if(!t.k){t.phase='none';announce("We couldn't find that in our guides.");rerenderTurn(t);return}
   t.phase='stream';rerenderTurn(t);announce('Answer ready');
   const i=thread.indexOf(t), body=stage.querySelector(`[data-i="${i}"] [data-body]`), full=fmt(DATA[t.k]);
   if(t.instant||reduce){done(t);return}
   let n=0;
-  const tick=()=>{n=Math.min(full.length,n+12);let part=full.slice(0,n);const lt=part.lastIndexOf('<'),gt=part.lastIndexOf('>');if(lt>gt)part=part.slice(0,lt);
-    const tmp=document.createElement('div');tmp.innerHTML=part;body.innerHTML=tmp.innerHTML+(n<full.length?'<span class="cursor"></span>':'');
+  const tick=()=>{n=Math.min(full.length,n+16);let part=full.slice(0,n);const lt=part.lastIndexOf('<'),gt=part.lastIndexOf('>');if(lt>gt)part=part.slice(0,lt);
+    const tmp=document.createElement('div');tmp.innerHTML=part;t.part=tmp.innerHTML;body.innerHTML=tmp.innerHTML+(n<full.length?'<span class="cursor"></span>':'');
     if(n>=full.length)done(t);else timers.push(setTimeout(tick,18))};
   tick();
 }
