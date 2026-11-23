@@ -584,6 +584,15 @@ function buildDD(){
     if(!ps.length)ps=POPULAR.filter(p=>p.toLowerCase()!==lv).slice(0,2);
     if(ps.length){h+='<h4>Suggested questions</h4>';ps.forEach(p=>{const i=ddItems.length;ddItems.push({type:'ask',text:p});h+=row(i,spark,hl(p,v.length>2?v:''),'','<span class="hint">Ask AI</span>')})}
     if(m.length){h+='<h4>Open a guide</h4>';m.forEach(x=>{const i=ddItems.length;ddItems.push({type:'guide',id:x.id});h+=row(i,arrowOut,hl(x.g[0],v.length>2?v:''),x.g[1]+' · opens the guide','<span class="opens">Open guide</span>','guiderow')})}
+  }else if(document.body.classList.contains('res')){
+    /* conversation, nothing typed yet: same three parts as when typing – the idea on show, other follow-ups, and the guides behind the latest answer */
+    const ideas=gIdeas(),first=ideas[gi]||ideas[0];
+    ddItems.push({type:'ask',text:first});
+    h+=row(0,spark,'Ask AI: “'+esc(first)+'”','Get a summarised answer from our guides','<kbd>↵</kbd>','askrow');
+    const rest=ideas.filter(p=>p!==first);
+    if(rest.length){h+='<h4>Suggested questions</h4>';rest.forEach(p=>{const i=ddItems.length;ddItems.push({type:'ask',text:p});h+=row(i,spark,esc(p),'','<span class="hint">Ask AI</span>')})}
+    const ans=thread.filter(x=>x.k&&x.phase==='done'),gids=ans.length?DATA[ans[ans.length-1].k].src.slice(0,2):[];
+    if(gids.length){h+='<h4>Open a guide</h4>';gids.forEach(id=>{const g=GUIDES[id],i=ddItems.length;ddItems.push({type:'guide',id});h+=row(i,arrowOut,esc(g[0]),g[1]+' · opens the guide','<span class="opens">Open guide</span>','guiderow')})}
   }else{
     h+='<h4>Suggested questions</h4>';
     gIdeas().forEach(p=>{const i=ddItems.length;ddItems.push({type:'ask',text:p});h+=row(i,spark,esc(p),'','<span class="hint">Ask AI</span>')});
@@ -593,7 +602,7 @@ function buildDD(){
 }
 let ddOrig='';
 /* arrowing through the list shows the highlighted question in the search box; guides leave it as typed */
-function previewValue(i){const it=ddItems[i];let v=ddOrig;if(it&&it.type==='ask'){const row=$('#opt-'+i);v=(row&&row.classList.contains('askrow'))?ddOrig:it.text}q.value=v;syncInput();ghostSync();try{q.setSelectionRange(v.length,v.length)}catch(_){}}
+function previewValue(i){const it=ddItems[i];let v=ddOrig;if(it&&it.type==='ask'){const row=$('#opt-'+i);v=(row&&row.classList.contains('askrow')&&ddOrig)?ddOrig:it.text}q.value=v;syncInput();ghostSync();try{q.setSelectionRange(v.length,v.length)}catch(_){}}
 function setActive(i,preview){ddActive=i;dd.querySelectorAll('.opt').forEach((o,k)=>o.setAttribute('aria-selected',k===i));if(i>=0){q.setAttribute('aria-activedescendant','opt-'+i);const el=$('#opt-'+i);el&&el.scrollIntoView({block:'nearest'})}else q.removeAttribute('aria-activedescendant');if(preview)previewValue(i)}
 function openDD(){if(!q.value.trim()&&!isPhone()&&!document.body.classList.contains('res')){closeDD();return}const was=dd.classList.contains('on');buildDD();if(!was){dd.classList.add('fresh');setTimeout(()=>dd.classList.remove('fresh'),600)}dd.classList.add('on');q.setAttribute('aria-expanded','true')}
 function closeDD(){dd.classList.remove('on');q.setAttribute('aria-expanded','false');q.removeAttribute('aria-activedescendant')}
