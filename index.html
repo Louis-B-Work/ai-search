@@ -158,6 +158,22 @@ main{background:#fff;padding:0 0 64px;min-height:520px;position:relative}
 .stp li::before{content:counter(s);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:var(--purple);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700}
 .stp li span{color:var(--muted)}
 @media(max-width:600px){.vs table{font-size:13px;line-height:18px}.vs th,.vs td{padding:7px 10px}.body p.key{padding:8px 12px}.stp li{grid-template-columns:24px 1fr;column-gap:10px}.stp li::before{width:24px;height:24px;font-size:13px}}
+.q{flex-direction:column;align-items:flex-end}
+.meta{font-size:12px;line-height:16px;color:rgba(255,255,255,.85);margin-top:5px}
+.meta-bot{margin-top:6px;padding-left:2px}
+.gpanel{margin-top:16px;border:1px solid var(--purple-20);border-radius:8px;overflow:hidden;background:#fff}
+.gph{background:var(--purple);color:#fff;padding:8px 14px;font-size:13px;line-height:18px;font-weight:700}
+.gp{display:grid;grid-template-columns:88px 1fr 20px;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--purple-10);color:#000;text-decoration:none}
+.gph+.gp{border-top:0}
+.gp:hover{background:var(--purple-10)}.gp:hover b{color:var(--purple)}
+.gi{display:block;width:88px;aspect-ratio:4/3;border-radius:6px;overflow:hidden;background:var(--purple-10)}
+.gi img,.gi svg{display:block;width:100%;height:100%;object-fit:cover}
+.gm{min-width:0;display:grid;gap:3px}
+.gc{display:flex;gap:6px;align-items:center;font-size:13px;line-height:18px;color:var(--muted)}
+.gc i{font-style:normal;flex:none;width:18px;height:18px;border-radius:50%;background:var(--purple-10);color:var(--purple);display:grid;place-items:center;font-size:11px;font-weight:700}
+.gp b{font-size:16px;line-height:21px}
+.ga{color:var(--purple);display:grid;place-items:center}
+@media(max-width:600px){.gp{grid-template-columns:64px 1fr 20px;gap:10px;padding:8px 12px}.gi{width:64px}.gp b{font-size:14px;line-height:19px}.gc{font-size:12px}.gph{padding:6px 12px}}
 .stopped{color:var(--muted);font-size:14px;margin:0}
 .lnk{background:none;border:0;padding:0;color:var(--purple);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -718,9 +734,11 @@ function fmt(d){
   const key=d.key?'<p class="key"><b>In short:</b> '+d.key+'</p>':'';
   const tbl=d.table?'<div class="vs"><table><caption>'+d.table.cap+'</caption><thead><tr>'+d.table.h.map(x=>'<th scope="col">'+x+'</th>').join('')+'</tr></thead><tbody>'+d.table.rows.map(r=>'<tr><th scope="row">'+r[0]+'</th>'+r.slice(1).map(x=>'<td>'+x+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>':'';
   const stp=d.steps?'<h4 class="sth">'+d.steps.h+'</h4><ol class="stp">'+d.steps.items.map(x=>'<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>').join('')+'</ol>':'';
-  const l1=d.paras.join('').replace(/\[(\d)\]/g,(m,n)=>{const id=d.src[n-1];return id?`<a class="cite" href="${gurl(id)}" target="_blank" rel="noopener" title="${esc(GUIDES[id][0])}" aria-label="Source ${n}: ${esc(GUIDES[id][0])}">${n}</a>`:''}).replace(/\{([^}]+)\}/g,(m,x)=>'<a href="'+(d.link?gurl(d.link):'#')+'" target="_blank" rel="noopener">'+x+'</a>');
+  const l1=d.paras.join('').replace(/\[(\d)\]/g,'').replace(/\{([^}]+)\}/g,(m,x)=>'<a href="'+(d.link?gurl(d.link):'#')+'" target="_blank" rel="noopener">'+x+'</a>');
   return key+l1+tbl+stp+(d.steps?'':`<ul class="points">${d.points.map(p=>`<li>${p}</li>`).join('')}</ul>`);
 }
+const fmtT=ms=>ms?new Date(ms).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}):'';
+function gpanel(d,pop){return `<div class="gpanel"${pop?' style="animation:rise .45s .1s both"':''}><div class="gph">Guides behind this answer</div>${d.src.map((id,n)=>{const g=GUIDES[id];return `<a class="gp" href="${gurl(id)}" target="_blank" rel="noopener"><span class="gi">${guidePic(id)}</span><span class="gm"><span class="gc">${esc(g[1])} · ${g[2]} min read</span><b>${esc(g[0])}</b></span><span class="ga">${arrowOut}</span></a>`}).join('')}</div>`}
 function turnHtml(t,i){
   const last=i===thread.length-1, d=t.k?DATA[t.k]:null;
   let main='';
@@ -743,17 +761,18 @@ function turnHtml(t,i){
     const done=t.phase==='done', st=t.phase==='stopped';
     const based=`<div class="based"><span>Based on ${d.src.length} guides</span>${d.src.map((id,n)=>`<a href="${gurl(id)}" target="_blank" rel="noopener"><i>${n+1}</i><span>${esc(GUIDES[id][0])}</span></a>`).join('')}</div>`;
     main=`<div class="reply"><article class="bubble answer ${done?'done':''}">
-      <div class="ahead"><h3 class="at">${esc(d.title)}</h3></div>${based}<div class="body" data-body>${done?fmt(d):st?(t.part||''):''}</div>
+      <div class="ahead"><h3 class="at">${esc(d.title)}</h3></div><div class="body" data-body>${done?fmt(d):st?(t.part||''):''}</div>
+      ${done?gpanel(d,t.pop):''}
       ${st?'<p class="stopped">Answer stopped. <button class="lnk" data-regen>Ask again</button></p>':done?'':'<button class="skip" data-skip>Skip animation</button>'}
-      </article></div>`;
+      </article>${(done||st)&&t.ansAt?`<div class="meta meta-bot">Car Finance 247 AI · <time>${fmtT(t.ansAt)}</time></div>`:''}</div>`;
   }
-  return `<section class="turn${t.enter?' enter':''}" data-i="${i}"><div class="q"><div class="you">${esc(t.text)}</div></div><div class="result"><div>${main}</div></div></section>`;
+  return `<section class="turn${t.enter?' enter':''}" data-i="${i}"><div class="q"><div class="you">${esc(t.text)}</div>${t.at?`<div class="meta">You · <time>${fmtT(t.at)}</time></div>`:''}</div><div class="result"><div>${main}</div></div></section>`;
 }
 function idle(){stage.innerHTML=''}
 const isPhone=()=>matchMedia('(max-width:600px)').matches;
 const phText=()=>isPhone()?'Ask AI...':(document.body.classList.contains('res')?'Ask a follow-up…':'Ask our AI your question...');
 matchMedia('(max-width:600px)').addEventListener('change',()=>{q.placeholder=phText()});
-function saveThread(){try{sessionStorage.setItem('cf247thread',JSON.stringify(thread.filter(t=>t.phase==='done'||t.phase==='none').map(t=>({text:t.text,k:t.k}))))}catch(_){}}
+function saveThread(){try{sessionStorage.setItem('cf247thread',JSON.stringify(thread.filter(t=>t.phase==='done'||t.phase==='none').map(t=>({text:t.text,k:t.k,at:t.at,ansAt:t.ansAt}))))}catch(_){}}
 function render(){
   const on=thread.length>0;stage.classList.toggle("res",on);document.body.classList.toggle('res',on);
   document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.s==='idle')!==on)));
@@ -780,7 +799,7 @@ function ask(text,opt={}){
   const prev=thread[thread.length-1];
   if(prev&&(opt.keep!==undefined?opt.keep:true)&&(prev.phase==='loading'||prev.phase==='stream')){clearTimers();prev.instant=true;finish(prev)}
   clearTimers();
-  const k=opt.k||pick(text), t={text,k,phase:'loading',step:0,hold:!!opt.hold,instant:!!opt.instant};
+  const k=opt.k||pick(text), t={text,k,at:Date.now(),phase:'loading',step:0,hold:!!opt.hold,instant:!!opt.instant};
   if(opt.error){t.phase='error'}
   const first=thread.length===0;
   const apply=()=>{
@@ -823,7 +842,7 @@ function updGo(){
 function stop(){
   const t=thread[thread.length-1];if(!t)return;clearTimers();
   if(t.phase==='loading'){thread.pop();q.value=t.text;syncInput();render();announce('Stopped. Your question is back in the box.');q.focus();return}
-  if(t.phase==='stream'){t.phase='stopped';render();announce('Answer stopped.')}
+  if(t.phase==='stream'){t.phase='stopped';t.ansAt=Date.now();render();announce('Answer stopped.')}
 }
 function finish(t){
   if(!t.k){t.phase='none';announce("We couldn't find that in our guides.");rerenderTurn(t);return}
@@ -836,7 +855,7 @@ function finish(t){
     if(n>=full.length)done(t);else timers.push(setTimeout(tick,18))};
   tick();
 }
-function done(t){clearTimers();t.phase='done';t.pop=!reduce;rerenderTurn(t);const last=thread[thread.length-1]===t;if(last)render();t.pop=false}
+function done(t){clearTimers();t.phase='done';if(!t.ansAt)t.ansAt=Date.now();t.pop=!reduce;rerenderTurn(t);const last=thread[thread.length-1]===t;if(last)render();t.pop=false}
 
 /* ---------- events ---------- */
 app.addEventListener('click',e=>{
@@ -881,7 +900,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
 document.addEventListener('click',e=>{if(!mnav.hidden&&!e.target.closest('#mnav,.menu'))setMenu(false)});
 matchMedia('(min-width:1001px)').addEventListener('change',e=>{if(e.matches)setMenu(false)});
 /* keep the conversation for this browser tab, so coming back from a guide (or a refresh) doesn't lose it */
-try{const saved=JSON.parse(sessionStorage.getItem('cf247thread')||'[]');if(Array.isArray(saved)&&saved.length)thread=saved.map(x=>({text:String(x.text),k:x.k&&DATA[x.k]?x.k:null,phase:x.k&&DATA[x.k]?'done':'none',step:0,instant:true}))}catch(_){}
+try{const saved=JSON.parse(sessionStorage.getItem('cf247thread')||'[]');if(Array.isArray(saved)&&saved.length)thread=saved.map(x=>({at:+x.at||0,ansAt:+x.ansAt||0,text:String(x.text),k:x.k&&DATA[x.k]?x.k:null,phase:x.k&&DATA[x.k]?'done':'none',step:0,instant:true}))}catch(_){}
 render();
 </script>
 </body>
